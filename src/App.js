@@ -1,13 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 import { Switch, BrowserRouter as Router } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // Import Routes
 import { authProtectedRoutes } from "./routes/";
 import AppRoute from "./routes/route";
-
 // layouts
-import VerticalLayout from "./components/VerticalLayout";
+import Layout from "./components/Layout";
 
 export default function App() {
   return (
@@ -18,7 +17,7 @@ export default function App() {
           {authProtectedRoutes.map((route, idx) => (
             <AppRoute
               path={route.path}
-              layout={VerticalLayout}
+              layout={Layout}
               component={route.component}
               key={idx}
               isAuthProtected={true}

@@ -3,14 +3,20 @@ import { Redirect } from "react-router-dom";
 
 // Authentication related pages
 import Login from "../pages/Login";
-import Dashboard from "../pages/Dashboard";
-import Test from "../pages/Test";
+import MyTests from "../pages/MyTests";
+import MyCandidates from "../pages/MyCandidates";
+import NewTest from "../pages/NewTest";
+import AddQuestions from "../pages/AddQuestions";
+import NewQuestion from "../pages/NewQuestion";
 
 const authProtectedRoutes = [
-  { path: "/dashboard", component: Dashboard },
-  { path: "/test", component: Test },
+  { path: "/tests", component: MyTests },
+  { path: "/new-test", component: NewTest },
+  { path: "/candidates", component: MyCandidates },
+  { path: "/add-questions", component: AddQuestions },
+  { path: "/new-question", component: NewQuestion },
   // this route should be at the end of all other routes
-  { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
+  { path: "/", exact: true, component: () => <Redirect to="/tests" /> },
 ];
 
 const publicRoutes = [{ path: "/login", component: Login }];
