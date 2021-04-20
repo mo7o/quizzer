@@ -1,5 +1,5 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 
 const AppRoute = ({
   component: Component,
@@ -10,6 +10,22 @@ const AppRoute = ({
   <Route
     {...rest}
     render={(props) => {
+      if (isAuthProtected && !localStorage.getItem("authUser")) {
+        return (
+          <Redirect
+            to={{ pathname: "/login", state: { from: props.location } }}
+          />
+        );
+      }
+
+      if (!isAuthProtected && localStorage.getItem("authUser")) {
+        return (
+          <Redirect
+            to={{ pathname: "/tests", state: { from: props.location } }}
+          />
+        );
+      }
+
       return (
         <Layout>
           <Component {...props} />
