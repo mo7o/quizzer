@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import InputCheck from "../components/InputCheck";
-import InputRadio from "../components/InputRadio";
+// import InputRadio from "../components/InputRadio";
 import { PageHead } from "../components/PageHead";
 
 export default function AddQuestions() {
@@ -38,17 +38,10 @@ export default function AddQuestions() {
               <div class="mt-5 md:mt-0 md:col-span-2">
                 <form action="#" method="POST">
                   <div class="overflow-hidden sm:rounded-md">
-                    {/* <fieldset>
-                      <div class="mt-4 space-y-4">
-                        {[1, 2, 3, 4].map((ic, index) => (
-                          <InputCheck index={index} />
-                        ))}
-                      </div>
-                    </fieldset> */}
                     <fieldset>
                       <div class="mt-4 space-y-4">
-                        {[1, 2, 3, 4].map((ic, index) => (
-                          <InputRadio index={index} />
+                        {["a", "b", "c", "d"].map((ic, index) => (
+                          <InputRadio ic={ic} key={index} />
                         ))}
                       </div>
                     </fieldset>
@@ -80,6 +73,28 @@ export default function AddQuestions() {
             </button>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function InputRadio({ ic }) {
+  return (
+    <div class="flex items-start items-center px-2">
+      <div class="flex items-center h-5">
+        <input
+          name="answer"
+          type="radio"
+          class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+        />
+      </div>
+      <div class="ml-3 text-sm w-full">
+        <input
+          type="text"
+          name="option"
+          placeholder={`Option ${ic}`}
+          className="mt-1 focus:ring-indigo-500 h-11 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+        />
       </div>
     </div>
   );

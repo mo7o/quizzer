@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { withRouter } from "react-router-dom";
 import { PageHead } from "../components/PageHead";
 import QuestionType from "./QuestionType";
 
-export default function AddQuestions() {
+function AddQuestions({ location }) {
   const [showSelectQuestion, setShowSelectQuestion] = useState(false);
+  // const { testId } = history.location.state;
 
   const toggleQuestionSelect = () => {
     setShowSelectQuestion(!showSelectQuestion);
@@ -15,7 +17,7 @@ export default function AddQuestions() {
       {showSelectQuestion && (
         <QuestionType toggleQuestionSelect={toggleQuestionSelect} />
       )}
-
+      {console.log(location)}
       <div className="max-w-7xl mx-auto">
         <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
           <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -44,3 +46,5 @@ export default function AddQuestions() {
     </div>
   );
 }
+
+export default withRouter(AddQuestions);

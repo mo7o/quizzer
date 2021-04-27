@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PageHead } from "../components/PageHead";
+import { withRouter } from "react-router-dom";
+import { getTests } from "../api";
 
-export default function Dashboard() {
+function Dashboard({ history }) {
+  const [userData, setUserData] = useState([]);
+
+  useEffect(() => {
+    if (userData.length === 0) {
+      const userId = localStorage.getItem("userId");
+      // setUserData([...userData, history?.location.state.userData]);
+      getTests(userId).then((res) => {
+        setUserData(res.data);
+      });
+    }
+  }, [userData.length]);
+
   return (
     <div className="h-screen">
+      {console.log("===>>>", userData)}
       <PageHead title="My Tests" />
       <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -22,66 +37,33 @@ export default function Dashboard() {
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
-                      Title
+                      Subject
                     </th>
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
-                      Status
+                      Last Updated on
                     </th>
                     <th
                       scope="col"
                       class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
-                      Role
+                      Test Link
                     </th>
-                    <th scope="col" class="relative px-6 py-3">
-                      <span class="sr-only">Edit</span>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="flex items-center">
-                        <div class="flex-shrink-0 h-10 w-10">
-                          <img
-                            class="h-10 w-10 rounded-full"
-                            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
-                            alt=""
-                          />
-                        </div>
-                        <div class="ml-4">
-                          <div class="text-sm font-medium text-gray-900">
-                            Jane Cooper
-                          </div>
-                          <div class="text-sm text-gray-500">
-                            jane.cooper@example.com
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-900">
-                        Regional Paradigm Technician
-                      </div>
-                      <div class="text-sm text-gray-500">Optimization</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                        Active
-                      </span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      Admin
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <a href="/" class="text-indigo-600 hover:text-indigo-900">
-                        Edit
-                      </a>
-                    </td>
-                  </tr>
+                  {userData.length > 0 &&
+                    userData.map((test) => (
+                      <TableRow key={test.id} test={test} history={history} />
+                    ))}
                 </tbody>
               </table>
             </div>
@@ -91,3 +73,38 @@ export default function Dashboard() {
     </div>
   );
 }
+
+const TableRow = ({ test, history }) => (
+  <tr>
+    <td class="px-6 py-4 whitespace-nowrap">
+      <div class="flex items-center">
+        <div class="text-sm font-medium text-gray-900">{test.name}</div>
+      </div>
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap">
+      <div class="text-sm text-gray-900">{test.subject}</div>
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap">
+      <span class="text-sm text-gray-900">{test.updated_at}</span>
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap">
+      <span class="text-sm text-gray-900">{test.link}</span>
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+      <button
+        class="text-indigo-600 hover:text-indigo-900"
+        onClick={(e) => {
+          history.push({
+            pathname: "/add-questions",
+            state: { testId: test.id },
+            search: `?testId=${test.id}`,
+          });
+        }}
+      >
+        Add questions
+      </button>
+    </td>
+  </tr>
+);
+
+export default withRouter(Dashboard);

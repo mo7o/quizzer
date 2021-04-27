@@ -22,21 +22,21 @@ export default function Header() {
                 />
               </div>
               <div className="hidden md:block">
-                <div className="ml-10 flex items-baseline space-x-4">
-                  <NavLink
+                <div className="text-gray-300 ml-10 flex items-baseline space-x-4">
+                  {/* <NavLink
                     to="/tests"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                     activeClassName="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    My Tests
-                  </NavLink>
-                  <NavLink
+                  > */}
+                  {/* My Tests */}
+                  {/* </NavLink> */}
+                  {/* <NavLink
                     to="/candidates"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                     activeClassName="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
                     My Candidates
-                  </NavLink>
+                  </NavLink> */}
                 </div>
               </div>
             </div>
@@ -108,6 +108,7 @@ export default function Header() {
                         href="/login"
                         onClick={() => {
                           localStorage.removeItem("authUser");
+                          localStorage.removeItem("userId");
                         }}
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"

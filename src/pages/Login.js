@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { login } from "../api";
 
 export default function Login({ history }) {
-  const [creds, setCreds] = useState({});
+  const [creds, setCreds] = useState({
+    email: "mohit@gmail.com",
+    password: "mohit123",
+  });
   const [wrongCreds, setWrongCreds] = useState(false);
 
   const handleChange = (e) => {
@@ -19,8 +22,13 @@ export default function Login({ history }) {
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
+          console.log(res.data);
           localStorage.setItem("authUser", res.data.jwt);
-          history.push("/tests");
+          localStorage.setItem("userId", res.data.user.id);
+          history.push({
+            pathname: "/tests",
+            state: { userData: res.data.user },
+          });
         }
       })
       .catch((err) => {
