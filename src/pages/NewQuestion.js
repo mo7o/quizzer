@@ -5,6 +5,18 @@ import InputCheck from "../components/InputCheck";
 import { PageHead } from "../components/PageHead";
 
 export default function AddQuestions() {
+  const [question, setQuestion] = useState({
+    question: "What is 2+2?",
+    questionType: "scq",
+    of_test: {id: 1},
+    options: [
+      { option: "2", isAnswer: false },
+      { option: "3", isAnswer: false },
+      { option: "4", isAnswer: true },
+      { option: "5", isAnswer: false },
+    ],
+  });
+
   return (
     <div className="h-100">
       <PageHead title="Create New Questions" noButton />
@@ -20,8 +32,8 @@ export default function AddQuestions() {
               </div>
               <div class="mt-4">
                 <textarea
-                  id="about"
                   name="about"
+                  value={question.question}
                   rows="15"
                   class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
                   placeholder="Question here..."
