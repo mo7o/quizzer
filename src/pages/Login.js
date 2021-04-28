@@ -3,8 +3,8 @@ import { login } from "../api";
 
 export default function Login({ history }) {
   const [creds, setCreds] = useState({
-    email: "mohit@gmail.com",
-    password: "mohit123",
+    email: "",
+    password: "",
   });
   const [wrongCreds, setWrongCreds] = useState(false);
 
@@ -25,6 +25,7 @@ export default function Login({ history }) {
           console.log(res.data);
           localStorage.setItem("authUser", res.data.jwt);
           localStorage.setItem("userId", res.data.user.id);
+          localStorage.setItem("userName", res.data.user.username);
           history.push({
             pathname: "/tests",
             state: { userData: res.data.user },

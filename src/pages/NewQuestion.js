@@ -1,21 +1,89 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import InputCheck from "../components/InputCheck";
-// import InputRadio from "../components/InputRadio";
 import { PageHead } from "../components/PageHead";
+import { createQuestion, updateQuestion } from "../api";
 
-export default function AddQuestions() {
+export default function AddQuestions({ history }) {
+  const { questionId, questionToEdit, answerToEdit, optionsToEdit } =
+    history.location.state || null;
+
+  const [options, setOptions] = useState(
+    optionsToEdit || [
+      { name: "a", value: "" },
+      { name: "b", value: "" },
+      { name: "c", value: "" },
+      { name: "d", value: "" },
+    ]
+  );
   const [question, setQuestion] = useState({
-    question: "What is 2+2?",
-    questionType: "scq",
-    of_test: {id: 1},
-    options: [
-      { option: "2", isAnswer: false },
-      { option: "3", isAnswer: false },
-      { option: "4", isAnswer: true },
-      { option: "5", isAnswer: false },
-    ],
+    question: questionToEdit || "",
+    of_test: history?.location.state.testId,
+    answer: answerToEdit || "",
   });
+
+  const handleQuestionChange = (e) => {
+    const { value } = e.target;
+
+    setQuestion({ ...question, question: value });
+  };
+
+  const handleOptionsChange = (n) => (e) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+    let newOptions = options.map((option, i) => {
+      if (option.name === name) {
+        return { ...option, name, value };
+      } else {
+        return option;
+      }
+    });
+
+    setOptions(newOptions);
+  };
+
+  const handleAnswerChange = (e) => {
+    const { value } = e.target;
+
+    setQuestion({ ...question, answer: value });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (questionId) {
+      const payload = {
+        question: question.question,
+        of_test: question.of_test,
+        options,
+        id: questionId,
+        answer: question.answer,
+      };
+
+      updateQuestion(payload).then((res) => {
+        const testId = res.data.of_test.id;
+        history.push({
+          pathname: "/add-questions",
+          state: { testId },
+          search: `?testId=${testId}`,
+        });
+      });
+    } else {
+      const payload = {
+        question: question.question,
+        of_test: question.of_test,
+        options,
+        answer: question.answer,
+      };
+
+      createQuestion(payload, questionId).then((res) => {
+        const testId = res.data.of_test.id;
+        history.push({
+          pathname: "/add-questions",
+          state: { testId },
+          search: `?testId=${testId}`,
+        });
+      });
+    }
+  };
 
   return (
     <div className="h-100">
@@ -23,63 +91,68 @@ export default function AddQuestions() {
 
       <div className="max-w-7xl mx-auto">
         <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
-          <div class="md:grid md:grid-cols-2 md:gap-10">
-            <div class="md:col-span-1">
-              <div class="px-4 sm:px-0">
-                <h3 class="text-lg font-medium leading-6 text-gray-900">
+          <div className="md:grid md:grid-cols-2 md:gap-10">
+            <div className="md:col-span-1">
+              <div className="px-4 sm:px-0">
+                <h3 className="text-lg font-medium leading-6 text-gray-900">
                   Question
                 </h3>
               </div>
-              <div class="mt-4">
+              <div className="mt-4">
                 <textarea
-                  name="about"
-                  value={question.question}
+                  name="question"
+                  value={question.question || ""}
+                  onChange={handleQuestionChange}
                   rows="15"
-                  class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
                   placeholder="Question here..."
                 ></textarea>
               </div>
             </div>
-            <div class="md:col-span-1">
-              <div class="sm:overflow-hidden">
-                <h3 class="text-lg font-medium leading-6 text-gray-900">
+            <div className="md:col-span-1">
+              <div className="sm:overflow-hidden">
+                <h3 className="text-lg font-medium leading-6 text-gray-900">
                   Select the right answer
                 </h3>
               </div>
 
-              <div class="mt-5 md:mt-0 md:col-span-2">
-                <form action="#" method="POST">
-                  <div class="overflow-hidden sm:rounded-md">
-                    <fieldset>
-                      <div class="mt-4 space-y-4">
-                        {["a", "b", "c", "d"].map((ic, index) => (
-                          <InputRadio ic={ic} key={index} />
-                        ))}
-                      </div>
-                    </fieldset>
-                  </div>
-                </form>
+              <div className="mt-5 md:mt-0 md:col-span-2">
+                <div className="overflow-hidden sm:rounded-md">
+                  <fieldset>
+                    <div className="mt-4 space-y-4">
+                      {options.map((option) => (
+                        <InputRadio
+                          option={option}
+                          key={option.name}
+                          defaultChecked={question.answer}
+                          handleOptionsChange={handleOptionsChange}
+                          handleAnswerChange={handleAnswerChange}
+                        />
+                      ))}
+                    </div>
+                  </fieldset>
+                </div>
               </div>
             </div>
           </div>
-          <div class="px-4 py-3 text-right sm:px-6">
-            <Link to="/add-questions">
-              <button
-                type="submit"
-                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-gray-300 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Cancel
-              </button>
-            </Link>
+          <div className="px-4 py-3 text-right sm:px-6">
             <button
-              type="submit"
-              class="inline-flex justify-center py-2 px-4 mx-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              onClick={(e) => {
+                history.push({
+                  pathname: "/add-questions",
+                  state: { testId: question.of_test },
+                  search: `?testId=${question.of_test}`,
+                });
+              }}
+              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-gray-300 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Save and add another
+              Back
             </button>
+
             <button
               type="submit"
-              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-800 hover:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              onClick={onSubmit}
+              className="inline-flex justify-center py-2 px-4 mx-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Save
             </button>
@@ -90,21 +163,31 @@ export default function AddQuestions() {
   );
 }
 
-function InputRadio({ ic }) {
+function InputRadio({
+  handleOptionsChange,
+  handleAnswerChange,
+  option,
+  defaultChecked,
+}) {
   return (
-    <div class="flex items-start items-center px-2">
-      <div class="flex items-center h-5">
+    <div className="flex items-start items-center px-2">
+      <div className="flex items-center h-5">
         <input
           name="answer"
+          onChange={handleAnswerChange}
           type="radio"
-          class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+          defaultChecked={defaultChecked}
+          value={option.name}
+          className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
         />
       </div>
-      <div class="ml-3 text-sm w-full">
+      <div className="ml-3 text-sm w-full">
         <input
           type="text"
-          name="option"
-          placeholder={`Option ${ic}`}
+          name={option.name}
+          value={option.value}
+          onChange={handleOptionsChange(option.name)}
+          placeholder={`Option ${option.name}`}
           className="mt-1 focus:ring-indigo-500 h-11 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
         />
       </div>

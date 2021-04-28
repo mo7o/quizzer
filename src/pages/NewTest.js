@@ -76,6 +76,16 @@ export default function Test({ history }) {
 
                 <div className="px-4 py-3 pb-6 bg-white text-right sm:px-6">
                   <button
+                    onClick={(e) => {
+                      history.push({
+                        pathname: "/tests",
+                      });
+                    }}
+                    className="inline-flex justify-center py-2 px-4 mx-3 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-gray-300 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    Back
+                  </button>
+                  <button
                     type="submit"
                     className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
