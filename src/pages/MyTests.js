@@ -61,10 +61,13 @@ function Dashboard({ history }) {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {userData.length > 0 &&
+                  {userData.length > 0 ? (
                     userData.map((test) => (
                       <TableRow key={test.id} test={test} history={history} />
-                    ))}
+                    ))
+                  ) : (
+                    <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -87,7 +90,7 @@ const TableRow = ({ test, history }) => (
     </td>
     <td className="px-6 py-4 whitespace-nowrap">
       <span className="text-sm text-gray-900">
-        {format(new Date(test.updated_at), "dd MMMM yyyy HH:mm")}
+        {format(new Date(test.updatedAt), "dd MMMM yyyy HH:mm")}
       </span>
     </td>
     <td className="px-6 py-4 whitespace-nowrap">

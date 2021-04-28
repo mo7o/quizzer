@@ -5,7 +5,7 @@ import { getQuestions, deleteQuestion } from "../api";
 import { format } from "date-fns";
 
 function AddQuestions({ history }) {
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState(null);
   const { testId } = history.location.state;
 
   useEffect(() => {
@@ -60,8 +60,10 @@ function AddQuestions({ history }) {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {questions.length > 0 ? (
-                        questions.map((question) => (
+                      {questions === null ? (
+                        <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+                      ) : questions.length > 0 ? (
+                        questions?.map((question) => (
                           <TableRow
                             key={question.id}
                             question={question}
@@ -123,7 +125,7 @@ const TableRow = ({ question, history, testId }) => (
     </td>
     <td className="px-6 py-4 whitespace-nowrap">
       <div className="text-sm text-gray-900">
-        {format(new Date(question.updated_at), "dd MMMM yyyy HH:mm")}
+        {format(new Date(question.updatedAt), "dd MMMM yyyy HH:mm")}
       </div>
     </td>
     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
