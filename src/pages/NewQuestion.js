@@ -28,7 +28,7 @@ export default function AddQuestions({ history }) {
 
   const handleOptionsChange = (n) => (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
+
     let newOptions = options.map((option, i) => {
       if (option.name === name) {
         return { ...option, name, value };
