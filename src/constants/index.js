@@ -1,48 +1,12 @@
-const question = {
-  question: "What is 2+2?",
-  questionType: "scq",
-  answers: [
-    { option: "2", isAnswer: false },
-    { option: "3", isAnswer: false },
-    { option: "4", isAnswer: true },
-    { option: "5", isAnswer: false },
-  ],
-};
+export const calculateScore = (userAns, questions) => {
+  console.log(userAns, questions);
+  let correctCount = 0;
 
-const allQuestions = {
-  testName: "Maths test",
-  testSubject: "",
-  questions: [
-    {
-      question: "What is 2+2?",
-      questionType: "scq",
-      answers: [
-        { option: "2", isAnswer: false },
-        { option: "3", isAnswer: false },
-        { option: "4", isAnswer: true },
-        { option: "5", isAnswer: false },
-      ],
-    },
-    {
-      question: "What is 5+5?",
-      questionType: "scq",
-      answers: [
-        { option: "5", isAnswer: false },
-        { option: "20", isAnswer: false },
-        { option: "10", isAnswer: true },
-        { option: "15", isAnswer: false },
-      ],
-    },
-  ],
-};
+  for (let index = 0; index < questions.length; index++) {
+    if (userAns[index] === questions[index].answer) {
+      correctCount = correctCount + 1;
+    }
+  }
 
-const tests = [
-  {
-    testName: "",
-    testSubject: "",
-    questionsCount: 3,
-    testAttemptsCount: 5,
-    lastUpdate: "date",
-    testLink: "",
-  },
-];
+  return { correctCount, totalCount: questions.length };
+};

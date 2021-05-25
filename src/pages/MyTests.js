@@ -19,7 +19,6 @@ function Dashboard({ history }) {
 
   return (
     <div className="h-screen">
-      {console.log("===>>>", userData)}
       <PageHead title="My Tests" />
       <div className="flex flex-col">
         <div className="my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -94,7 +93,19 @@ const TableRow = ({ test, history }) => (
       </span>
     </td>
     <td className="px-6 py-4 whitespace-nowrap">
-      <span className="text-sm text-gray-900">{test.link}</span>
+      <span className="text-sm text-gray-900">
+        <button
+          onClick={(e) => {
+            history.push({
+              pathname: "/take-test",
+              state: { testId: test.id },
+              search: `?testId=${test.id}`,
+            });
+          }}
+        >
+          Open Test
+        </button>
+      </span>
     </td>
     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
       <button

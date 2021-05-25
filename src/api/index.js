@@ -1,5 +1,5 @@
 import axios from "axios";
-const HOST = "https://stormy-dawn-16745.herokuapp.com"
+const HOST = "https://stormy-dawn-16745.herokuapp.com";
 
 export function login(email, password) {
   return new Promise((resolve, reject) => {
@@ -76,6 +76,17 @@ export function deleteQuestion(id) {
     axios({
       method: "DELETE",
       url: `${HOST}/questions/${id}`,
+    })
+      .then((res) => resolve(res))
+      .catch((e) => reject(e));
+  });
+}
+
+export function getTest(testId) {
+  return new Promise((resolve, reject) => {
+    axios({
+      method: "get",
+      url: `${HOST}/tests/${testId}`,
     })
       .then((res) => resolve(res))
       .catch((e) => reject(e));

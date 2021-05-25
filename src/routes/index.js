@@ -8,6 +8,7 @@ import MyCandidates from "../pages/MyCandidates";
 import NewTest from "../pages/NewTest";
 import AddQuestions from "../pages/AddQuestions";
 import NewQuestion from "../pages/NewQuestion";
+import TakeTest from "../pages/TakeTest";
 
 const authProtectedRoutes = [
   { path: "/tests", component: MyTests },
@@ -19,6 +20,9 @@ const authProtectedRoutes = [
   { path: "/", exact: true, component: () => <Redirect to="/tests" /> },
 ];
 
-const publicRoutes = [{ path: "/login", component: Login }];
+const publicRoutes = [
+  { path: "/login", component: Login },
+  { path: "/take-test", component: TakeTest },
+];
 
 export { authProtectedRoutes, publicRoutes };
